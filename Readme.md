@@ -4,7 +4,7 @@
 
 # Génération d'Iptables via un fichier csv (avec les bonnes pratiques)
 
-Grace à un fichier Excel qui aide à fluidifier l'écriture des iptables, nous sauvegarderons ce même fichier en CSV, puis via le fichier python projet06.py nous uploaderons les différentes règles automatiquement.
+Grace à un fichier Excel (iptables-redaction.xlsx) qui aide à fluidifier l'écriture des iptables, nous sauvegarderons ce même fichier en CSV, puis via le fichier python projet06.py nous uploaderons les différentes règles automatiquement sur le PC/Serveur.
 
 ![alt text](https://raw.githubusercontent.com/alex4gous/Projet06-OC/main/git-Capture%20d%E2%80%99%C3%A9cran%202021-06-06%20155059.png)
 
