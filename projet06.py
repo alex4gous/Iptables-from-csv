@@ -1,51 +1,108 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-##############################################################################
-#																			 #
-#								FIREWALL									 #
-#																			 #
-##############################################################################
-########### Mise en place automatique d'iptables via fichier csv #############
-##############################################################################
+"""P6.py: Mise en place d'iptables à partir d'un fichier csv préconçu."""
+
+__author__ = "Alexandre FOURGOUS"
+__copyright__ = "Copyright 2021, Openclassrooms P6"
+__credits__ = ["alexandre fourgous"]
+__license__ = "GPL"
+__version__ = "1.0"
+__maintainer__ = "alex4gous"
+__email__ = "alexandre.fourgous@orange.fr"
+__status__ = "Production"
+
+# Exemples:
+# python3 P6.py --file iptables.csv
 
 ### Les imports
-
-import sys
-import subprocess, os
 import apt
+import subprocess, os
+import sys
+import csv
+import argparse
+
+
+
+parser = argparse.ArgumentParser(description="Generateur d'iptables")
+parser.add_argument('-f','--file', help='Import du fichier csv', required=True)
+args = vars(parser.parse_args())
+#print(args['file'])
+
+
+### Requis
+# python3 -m pip install python_iptables
 
 
 # Etape 1
-	# On vérifie si le service iptable existe
+# On verifie si le service iptable existe
 cache = apt.Cache()
-if cache['iptables'].is_installed:
-	print("YES it's installed")
-else:
-	print("NO it's NOT installed")
+cache.open()
 
-subprocess.call(["sudo", "apt-get", "update"])
+# On vérifie que iptables est installé
+if cache['iptables'].is_installed:
+        pass
+else:
+        print("Il faut installer le paquet iptables")
+        sys.exit(2)
+
+# blablablabla
+# Si possible installer le paquet en silent - avec input choix exit ou install paquet.
+if cache['iptables-persistent'].is_installed:
+        pass
+else:
+        print("Il faut installer le paquet iptables-persistent")
+        sys.exit(2)
+        #os.system("apt-get install iptables-persistent -y") alternative possible
+
+
+# On vérifie qu'on est ROOT
+if not os.getuid() == 0:
+        print("Il faut etre root pour changer les iptables.")
+        sys.exit(2)
+
 # Etape 2
-	# On met la politique de iptable (les 3) ou (les 6) en accept
+# On met la politique de iptable (les 3) ou (les 6) en accept
+
+list_policy = ["FORWARD", "INPUT", "OUTPUT"]
+#os.system('iptables --policy FORWARD DROP')
+def policy_iptables(list_policy, politique):
+        for policy in list_policy:
+                os.system('iptables --policy ' + policy + ' ' + politique)
+
+policy_iptables(list_policy, 'ACCEPT')
+
 
 # Etape 3
-	# On clear les règles existantes
+# On clear les règles existantes
+os.system('iptables -F')
 
-# Etape 4
-	# On lit le csv:
-		### Boucle ligne par ligne:
-			# ligne par ligne
-			# à partir de la 3eme ligne. Puisque la deuxieme ligne d'entete (les arguments qui seront utilisés aprés) sera utilisé pour les arguments.
-			# On organise la règle pour du shell / python si possible
-			# On execute la règle
+# Etape 4a
+# On del les 2 premieres lignes
+# On delete deux lignes ici:
+a_file = open(args['file'], "r")
+lines = a_file.readlines()
+a_file.close()
+del lines[0]
+# On supprimer la ligne 1
+del lines[0]
+# Puis la ligne 2
+new_file = open("temp.csv", "w+")
+for line in lines: # On écrit dans le fichier temp.csv sans les lignes 1 et 2
+    new_file.write(line)
+new_file.close()
 
-	
 
-import subprocess, os
-import csv
+# Etape 4b
+ # On lit le csv:
+  # Boucle ligne par ligne:
+  ## ligne par ligne à partir de la 3eme ligne. Puisque la deuxieme ligne d'entete (les arguments qui seront utilisés aprés)
+  ## sera utilisé pour les arguments. On organise la règle pour du shell / python si possible On execute la règle
 
-parametre_du_tableau = ["Hostame", "From", "To", "Port", "Command", "-t", "-A", "--policy", "-p", "-d", "-s", "-i", "-o", "--dport", "--sport", "-m", "--c$
+parametre_du_tableau = ["Hostame", "From", "To", "Port", "Command", "-t", "-A", "--policy", "-p", "-d", "-s", "-i", "-o", "--dport", "--sport", "-m", "--ctstate", "-d", "--ipv4", "-j", "--to-destination"]
 
-with open('iptables.csv', newline='') as f:
+
+with open('temp.csv', newline='') as f:
      reader = csv.reader(f)
      for row in reader:
 # Ajouter les paramètres aux valeurs non vide du tableau
@@ -87,11 +144,20 @@ with open('iptables.csv', newline='') as f:
            os.system(" ".join(row[4:21]))
 
 
-		
-			
+# A voir si on peut pas rajouter en paramètre le fichier iptables.csv (fait)
+# Et supprimer les dernieres lignes "vides" du csv (non fait)
+
 # Etape 5
-	# On met la politique de iptable (les 3) ou (les 6) en deny
+# On met la politique de iptable (les 3) ou (les 6) en deny
+# Je reprend la fonction de l'étape 2
+policy_iptables(list_policy, 'DROP')
+
 
 # Etape 6
-	# On sauvegarde la règle
+# On sauvegarde la règle
+# Grace au paquet iptables-persistent
+os.system("iptables-save > /etc/iptables/rules.v4")
 
+# Etape 7
+# On supprime le fichier temp.csv
+os.system("rm temp.csv")
