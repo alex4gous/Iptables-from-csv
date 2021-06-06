@@ -41,8 +41,8 @@ else:
         print("Il faut installer le paquet iptables")
         sys.exit(2)
 
-# blablablabla
-# Si possible installer le paquet en silent - avec input choix exit ou install paquet.
+# On vérifie que iptables-persistent est installé
+# Pour plus tard: Si possible installer le paquet en silent - avec input choix exit ou install paquet.
 if cache['iptables-persistent'].is_installed:
         pass
 else:
@@ -57,7 +57,7 @@ if not os.getuid() == 0:
         sys.exit(2)
 
 # Etape 2
-# On met la politique de iptable (les 3) ou (les 6) en accept
+# On met la politique de iptable (les 3) ou (les 6) en accept (parce que si on est connecté en SSH on sera ejecté sinon.)
 
 list_policy = ["FORWARD", "INPUT", "OUTPUT"]
 #os.system('iptables --policy FORWARD DROP')
@@ -73,7 +73,7 @@ policy_iptables(list_policy, 'ACCEPT')
 os.system('iptables -F')
 
 # Etape 4a
-# On del les 2 premieres lignes
+# On supprime les 2 premieres lignes
 # On delete deux lignes ici:
 a_file = open(args['file'], "r")
 lines = a_file.readlines()
@@ -83,7 +83,7 @@ del lines[0]
 del lines[0]
 # Puis la ligne 2
 new_file = open("temp.csv", "w+")
-for line in lines: # On écrit dans le fichier temp.csv sans les lignes 1 et 2
+for line in lines: # On écrit dans le fichier temp.csv sans les lignes 1 et 2 (pour éviter de toucher au fichier original)
     new_file.write(line)
 new_file.close()
 
@@ -135,10 +135,10 @@ with open('temp.csv', newline='') as f:
               row[19] = parametre_du_tableau[19] + " " + row[19]
            if row[20] != "":
               row[20] = parametre_du_tableau[20] + " " + row[20]
-           # à VOIR POUR FAIRE AUTREMENT
+           # à VOIR POUR FAIRE AUTREMENT - mais une boucle for ne fonctionne pas
            os.system(" ".join(row[4:21]))
 
-
+# Features:
 # A voir si on peut pas rajouter en paramètre le fichier iptables.csv (fait)
 # Et supprimer les dernieres lignes "vides" du csv (non fait)
 
