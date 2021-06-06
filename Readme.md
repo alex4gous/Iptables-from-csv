@@ -2,9 +2,9 @@
 
 ---
 
-# Génération d'Iptables via un fichier csv (avec les bonnes pratiques)
+# GÃ©nÃ©ration d'Iptables via un fichier csv (avec les bonnes pratiques)
 
-Grace à un fichier Excel (iptables-redaction.xlsx) qui aide à fluidifier l'écriture des iptables, nous sauvegarderons ce même fichier en CSV, puis via le fichier python projet06.py nous uploaderons les différentes règles automatiquement sur le PC/Serveur.
+Grace Ã  un fichier Excel (iptables-redaction.xlsx) qui aide Ã  fluidifier l'Ã©criture des iptables, nous sauvegarderons ce mÃªme fichier en CSV, puis via le fichier python projet06.py nous uploaderons les diffÃ©rentes rÃ¨gles automatiquement sur le PC/Serveur.
 
 ![alt text](https://raw.githubusercontent.com/alex4gous/Projet06-OC/main/git-Capture%20d%E2%80%99%C3%A9cran%202021-06-06%20155059.png)
 
@@ -17,7 +17,7 @@ pip install csv
 pip install apt
 ```
 
-- Generer le fichier csv (à partir du fichier excel):
+- Generer le fichier csv (Ã  partir du fichier excel):
 
 ![alt text](https://raw.githubusercontent.com/alex4gous/Projet06-OC/main/git-Capture%20d%E2%80%99%C3%A9cran%202021-06-06%20153123.png)
 
@@ -28,6 +28,7 @@ Lancement du script:
 ```bash
 python3 projet06.py --file exemple.csv
 ```
+Dans le fichier exemple.csv, ne pas oublier de mettre votre adresse ip. L'exemple.csv autorise une seule connexion en SSH vers un PC distant.
 
 ### Attention, le fichier csv est obligatoire !
 ```python
@@ -46,17 +47,17 @@ args = vars(parser.parse_args())
 ```
 
 ## Evolution du code
-- Récupération des entetes permetants des ajouts (ou suppression) de certains arguments
+- RÃ©cupÃ©ration des entetes permetants des ajouts (ou suppression) de certains arguments
 - Supprimer les lignes vides du csv (qui peuvent faire planter)
-- L'installation automatique n'est pas faite car ce script a été développer sous debian 10. Donc faire en sorte que le script soit lancé sur les différentes distributions serait un plus. Que les paquets (iptables, iptables-persistent) s'installent automatiquement serait un gros plus.
+- L'installation automatique n'est pas faite car ce script a Ã©tÃ© dÃ©velopper sous debian 10. Donc faire en sorte que le script soit lancÃ© sur les diffÃ©rentes distributions serait un plus. Que les paquets (iptables, iptables-persistent) s'installent automatiquement serait un gros plus.
 
 ---
 
 ## Rappel iptables
 
 ```bash
-iptables -L #Pour lister nos règles parefeu
-iptables -F #Pour vider notre table de règle
+iptables -L #Pour lister nos rÃ¨gles parefeu
+iptables -F #Pour vider notre table de rÃ¨gle
 ```
 
 ![alt text](https://raw.githubusercontent.com/alex4gous/Projet06-OC/main/git-Capture%20d%E2%80%99%C3%A9cran%202021-06-06%20153005.png) 
