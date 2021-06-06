@@ -22,16 +22,12 @@ import sys
 import csv
 import argparse
 
-
 parser = argparse.ArgumentParser(description="Generateur d'iptables")
 parser.add_argument('-f','--file', help='Import du fichier csv', required=True)
 args = vars(parser.parse_args())
 
-
-
 ### Requis
 # python3 -m pip install python_iptables
-
 
 # Etape 1
 # On verifie si le service iptable existe
