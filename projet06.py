@@ -23,11 +23,10 @@ import csv
 import argparse
 
 
-
 parser = argparse.ArgumentParser(description="Generateur d'iptables")
 parser.add_argument('-f','--file', help='Import du fichier csv', required=True)
 args = vars(parser.parse_args())
-#print(args['file'])
+
 
 
 ### Requis
