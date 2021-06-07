@@ -2,7 +2,7 @@
 
 ---
 
-# Génération d'Iptables via un fichier csv (avec les bonnes pratiques)
+# Génération d'Iptables via un fichier csv sous Debian(avec les bonnes pratiques)
 
 Grace à un fichier Excel (iptables-redaction.xlsx) qui aide à fluidifier l'écriture des iptables, nous sauvegarderons ce même fichier en CSV, puis via le fichier python projet06.py nous uploaderons les différentes règles automatiquement sur le PC/Serveur.
 
